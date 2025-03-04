@@ -1,4 +1,4 @@
-package plus.dragons.createdragonlib.advancement;
+package plus.dragons.createenchantmentindustry.dragonLibLegacy.advancement;
 
 import com.google.gson.JsonObject;
 import com.simibubi.create.foundation.advancement.CreateAdvancement;
@@ -14,8 +14,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import plus.dragons.createdragonlib.advancement.critereon.SimpleTrigger;
-import plus.dragons.createdragonlib.advancement.critereon.TriggerFactory;
+import plus.dragons.createenchantmentindustry.dragonLibLegacy.advancement.critereon.SimpleTrigger;
+import plus.dragons.createenchantmentindustry.dragonLibLegacy.advancement.critereon.TriggerFactory;
 import plus.dragons.createenchantmentindustry.foundation.mixin.dragonLibLegacy.CreateAdvancementConstructor;
 
 import javax.annotation.Nullable;

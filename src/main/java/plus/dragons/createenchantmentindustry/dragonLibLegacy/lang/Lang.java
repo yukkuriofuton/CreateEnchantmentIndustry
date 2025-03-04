@@ -1,4 +1,4 @@
-package plus.dragons.createdragonlib.lang;
+package plus.dragons.createenchantmentindustry.dragonLibLegacy.lang;
 
 import net.createmod.catnip.lang.LangNumberFormat;
 import net.minecraft.Util;

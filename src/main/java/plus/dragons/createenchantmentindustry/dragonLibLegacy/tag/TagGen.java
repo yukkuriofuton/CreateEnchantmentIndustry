@@ -1,4 +1,4 @@
-package plus.dragons.createdragonlib.tag;
+package plus.dragons.createenchantmentindustry.dragonLibLegacy.tag;
 
 /*
 MIT License
@@ -38,7 +38,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
-import plus.dragons.createdragonlib.init.SafeRegistrate;
+import plus.dragons.createenchantmentindustry.dragonLibLegacy.init.SafeRegistrate;
 
 import java.util.ArrayList;
 import java.util.List;

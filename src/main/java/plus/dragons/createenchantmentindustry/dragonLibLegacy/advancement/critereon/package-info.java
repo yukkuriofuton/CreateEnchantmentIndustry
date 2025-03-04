@@ -1,6 +1,6 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-package plus.dragons.createdragonlib.gui;
+package plus.dragons.createenchantmentindustry.dragonLibLegacy.advancement.critereon;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 

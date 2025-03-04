@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import plus.dragons.createdragonlib.fluid.FluidLavaReaction;
+import plus.dragons.createenchantmentindustry.dragonLibLegacy.fluid.FluidLavaReaction;
 
 @Mixin(value = FluidReactions.class, remap = false)
 public class FluidReactionsMixin {

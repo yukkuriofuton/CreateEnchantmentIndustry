@@ -1,4 +1,4 @@
-package plus.dragons.createdragonlib.init;
+package plus.dragons.createenchantmentindustry.dragonLibLegacy.init;
 
 import com.simibubi.create.foundation.data.CreateEntityBuilder;
 import com.simibubi.create.foundation.data.CreateRegistrate;

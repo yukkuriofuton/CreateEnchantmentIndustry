@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import plus.dragons.createdragonlib.gui.ComponentLabel;
+import plus.dragons.createenchantmentindustry.dragonLibLegacy.gui.ComponentLabel;
 import plus.dragons.createenchantmentindustry.entry.CeiPackets;
 
 import javax.annotation.Nullable;

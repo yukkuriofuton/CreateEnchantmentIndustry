@@ -1,6 +1,6 @@
 package plus.dragons.createenchantmentindustry.foundation.gui;
 
-import plus.dragons.createdragonlib.gui.GuiTexture;
+import plus.dragons.createenchantmentindustry.dragonLibLegacy.gui.GuiTexture;
 import plus.dragons.createenchantmentindustry.EnchantmentIndustry;
 
 public class CeiGuiTextures {

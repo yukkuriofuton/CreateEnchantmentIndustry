@@ -1,4 +1,4 @@
-package plus.dragons.createdragonlib.lang;
+package plus.dragons.createenchantmentindustry.dragonLibLegacy.lang;
 
 import joptsimple.internal.Strings;
 import net.minecraft.ChatFormatting;

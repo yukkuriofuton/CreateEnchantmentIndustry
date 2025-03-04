@@ -1,4 +1,4 @@
-package plus.dragons.createdragonlib.advancement.critereon;
+package plus.dragons.createenchantmentindustry.dragonLibLegacy.advancement.critereon;
 
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;

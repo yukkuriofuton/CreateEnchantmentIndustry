@@ -1,4 +1,4 @@
-package plus.dragons.createdragonlib.advancement;
+package plus.dragons.createenchantmentindustry.dragonLibLegacy.advancement;
 
 import com.google.common.collect.Sets;
 import net.minecraft.advancements.Advancement;

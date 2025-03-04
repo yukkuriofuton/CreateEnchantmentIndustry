@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import plus.dragons.createdragonlib.advancement.AdvancementHolder;
-import plus.dragons.createdragonlib.advancement.CreateAdvancementAccess;
+import plus.dragons.createenchantmentindustry.dragonLibLegacy.advancement.AdvancementHolder;
+import plus.dragons.createenchantmentindustry.dragonLibLegacy.advancement.CreateAdvancementAccess;
 
 import javax.annotation.Nullable;
 

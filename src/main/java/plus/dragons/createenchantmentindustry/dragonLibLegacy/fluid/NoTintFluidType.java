@@ -1,4 +1,4 @@
-package plus.dragons.createdragonlib.fluid;
+package plus.dragons.createenchantmentindustry.dragonLibLegacy.fluid;
 
 import com.simibubi.create.AllFluids;
 import net.minecraft.core.BlockPos;

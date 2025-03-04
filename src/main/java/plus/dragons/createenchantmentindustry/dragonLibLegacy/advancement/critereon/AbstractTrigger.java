@@ -1,4 +1,4 @@
-package plus.dragons.createdragonlib.advancement.critereon;
+package plus.dragons.createenchantmentindustry.dragonLibLegacy.advancement.critereon;
 
 import com.google.common.collect.Maps;
 import net.minecraft.advancements.CriterionTrigger;

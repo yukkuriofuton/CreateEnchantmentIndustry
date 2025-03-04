@@ -1,4 +1,4 @@
-package plus.dragons.createdragonlib.advancement;
+package plus.dragons.createenchantmentindustry.dragonLibLegacy.advancement;
 
 public interface CreateAdvancementAccess {
     

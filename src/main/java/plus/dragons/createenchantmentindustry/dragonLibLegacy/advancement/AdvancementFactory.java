@@ -1,8 +1,8 @@
-package plus.dragons.createdragonlib.advancement;
+package plus.dragons.createenchantmentindustry.dragonLibLegacy.advancement;
 
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.data.event.GatherDataEvent;
-import plus.dragons.createdragonlib.advancement.critereon.TriggerFactory;
+import plus.dragons.createenchantmentindustry.dragonLibLegacy.advancement.critereon.TriggerFactory;
 
 public class AdvancementFactory {
     private final String modid;
