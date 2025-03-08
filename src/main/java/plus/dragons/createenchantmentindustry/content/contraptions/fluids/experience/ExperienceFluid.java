@@ -9,20 +9,28 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
+import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 import javax.annotation.Nullable;
 
 public class ExperienceFluid extends VirtualFluid {
-    
+    public static ExperienceFluid createSource(ForgeFlowingFluid.Properties properties) {
+        return new ExperienceFluid(properties,true);
+    }
+
+    public static ExperienceFluid createFlowing(ForgeFlowingFluid.Properties properties) {
+        return new ExperienceFluid(properties,false);
+    }
+
     protected final int xpRatio;
     
-    public ExperienceFluid(int xpRatio, Properties properties) {
-        super(properties,true);
+    public ExperienceFluid(int xpRatio, Properties properties, boolean source) {
+        super(properties,source);
         this.xpRatio = xpRatio;
     }
     
-    public ExperienceFluid(Properties properties) {
-        this(1, properties);
+    public ExperienceFluid(Properties properties, boolean source) {
+        this(1, properties, source);
     }
     
     public ExperienceOrb convertToOrb(Level level, double x, double y, double z, int fluidAmount) {

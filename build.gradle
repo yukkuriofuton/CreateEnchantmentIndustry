@@ -1,3 +1,5 @@
+import me.modmuss50.mpp.ReleaseType
+
 plugins {
     id 'idea'
     id 'maven-publish'
@@ -160,7 +162,7 @@ publishMods {
     file = reobfJar.archiveFile
     changelog = new File("changelog/${mod_version}.md").text
     version = mod_version
-    type = BETA
+    type = STABLE
     displayName = "CEI ${mod_version} for Create ${minecraft_version}-${create_version}"
     modLoaders.add("forge")
     modLoaders.add("neoforge")
