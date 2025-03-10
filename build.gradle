@@ -3,7 +3,7 @@ import me.modmuss50.mpp.ReleaseType
 plugins {
     id 'idea'
     id 'maven-publish'
-    id "net.neoforged.moddev.legacyforge" version "2.0.78"
+    id "net.neoforged.moddev.legacyforge" version "2.0.74"
     id "me.modmuss50.mod-publish-plugin" version "0.8.4"
 }
 
@@ -27,7 +27,7 @@ idea {
 legacyForge {
     version = "$minecraft_version-$forge_version"
 
-    // TODO - Try turning this on later  see Create
+    // TODO - Try turning this on later see Create
     validateAccessTransformers = false
     accessTransformers.from "src/main/resources/META-INF/accesstransformer.cfg"
 
@@ -94,28 +94,16 @@ repositories {
     maven { url = "https://maven.theillusivec4.top/" } // Curios API
     maven { url = "https://www.cursemaven.com" }
     maven { url = "https://api.modrinth.com/maven" }
-    maven {
-        name 'DragonsPlus Maven'
-        url "https://maven.dragons.plus/releases"
-    }
 }
 
 dependencies {
-    /*jarJar("plus.dragons.createdragonlib:create_dragon_lib-${minecraft_version}") {
-        version {
-            strictly "${create_dragon_lib_version_range}"
-        }
-        transitive = false
-    }*/
-
-    modImplementation("com.simibubi.create:create-${minecraft_version}:${create_version}-${create_version_number}") { transitive = false }
+    modImplementation("com.simibubi.create:create-${minecraft_version}:${create_version}-${create_version_number}:slim") { transitive = false }
     modImplementation("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}")
     modCompileOnly("dev.engine-room.flywheel:flywheel-forge-api-${flywheel_minecraft_version}:${flywheel_version}")
     modRuntimeOnly("dev.engine-room.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
     modImplementation("com.tterrag.registrate:Registrate:${registrate_version}")
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
-
-    // modImplementation("plus.dragons.createdragonlib:create_dragon_lib-${minecraft_version}:${create_dragon_lib_version}")
+    implementation("io.github.llamalad7:mixinextras-forge:0.4.1")
 
     modCompileOnly("mezz.jei:jei-${jei_minecraft_version}-common-api:${jei_version}")
     modCompileOnly("mezz.jei:jei-${jei_minecraft_version}-forge-api:${jei_version}")
