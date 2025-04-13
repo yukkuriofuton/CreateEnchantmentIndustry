@@ -30,6 +30,8 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import java.util.List;
 import java.util.Optional;
+
+import com.simibubi.create.foundation.item.ItemHelper;
 import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -41,6 +43,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -59,10 +62,10 @@ import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 import plus.dragons.createdragonsplus.common.advancements.AdvancementBehaviour;
 import plus.dragons.createdragonsplus.util.FieldsNullabilityUnknownByDefault;
+import plus.dragons.createenchantmentindustry.common.registry.CEIAdvancements;
 import plus.dragons.createenchantmentindustry.common.registry.CEIFluids;
 import plus.dragons.createenchantmentindustry.common.registry.CEIRecipes;
 import plus.dragons.createenchantmentindustry.common.registry.CEIStats;
-import plus.dragons.createenchantmentindustry.common.registry.CEIAdvancements;
 
 @FieldsNullabilityUnknownByDefault
 public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
@@ -75,12 +78,12 @@ public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
 
     public GrindstoneDrainBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        inventory = new ProcessingInventory(this::start){
+        inventory = new ProcessingInventory(this::start) {
             @Override
             public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
                 var space = tank.getPrimaryHandler().getSpace();
-                if(GrindstoneHelper.getExperienceFromItem(stack)>space) return stack;
-                if(GrindstoneHelper.getExperienceFromGrindingRecipe(level,stack)>space) return stack;
+                if (GrindstoneHelper.getExperienceFromItem(stack) > space) return stack;
+                if (GrindstoneHelper.getExperienceFromGrindingRecipe(level, stack) > space) return stack;
                 return super.insertItem(slot, stack, simulate);
             }
         }.withSlotLimit(true);
@@ -111,7 +114,7 @@ public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
 
     private Direction getOutputSide() {
         var facing = getBlockState().getValue(HorizontalKineticBlock.HORIZONTAL_FACING);
-        var speed = facing==Direction.WEST || facing==Direction.NORTH ? getSpeed() * -1: getSpeed();
+        var speed = facing == Direction.WEST || facing == Direction.NORTH ? getSpeed() * -1 : getSpeed();
         return speed > 0 ? facing.getClockWise() : facing.getCounterClockWise();
     }
 
@@ -203,8 +206,8 @@ public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
             else if (!fluidResults.isEmpty())
                 applicable = fill(fluidResults.getFirst());
             if (applicable) {
-                if(fluidResults.getFirst().is(CEIFluids.EXPERIENCE))
-                    advancement.awardStat(CEIStats.GRINDSTONE_EXPERIENCE.get(),fluidResults.getFirst().getAmount());
+                if (fluidResults.getFirst().is(CEIFluids.EXPERIENCE))
+                    advancement.awardStat(CEIStats.GRINDSTONE_EXPERIENCE.get(), fluidResults.getFirst().getAmount());
                 inventory.clear();
                 var grinded = recipe.rollResults();
                 for (int i = 0; i < grinded.size(); i++)
@@ -229,7 +232,7 @@ public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
             var fluid = new FluidStack(CEIFluids.EXPERIENCE, result.experience());
             if (fill(fluid)) {
                 advancement.trigger(CEIAdvancements.GONE_WITH_THE_FOIL.builtinTrigger());
-                advancement.awardStat(CEIStats.GRINDSTONE_EXPERIENCE.get(),fluid.getAmount());
+                advancement.awardStat(CEIStats.GRINDSTONE_EXPERIENCE.get(), fluid.getAmount());
                 inventory.clear();
                 inventory.setStackInSlot(0, result.top());
                 inventory.setStackInSlot(1, result.bottom());
@@ -283,8 +286,7 @@ public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
                 pos.z + inputSide.getStepZ() * offset,
                 inputSide.getStepX() * speed,
                 level.random.nextFloat() * speed,
-                inputSide.getStepZ() * speed
-        );
+                inputSide.getStepZ() * speed);
     }
 
     @Override
@@ -303,6 +305,12 @@ public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
         inventory.deserializeNBT(registries, compound.getCompound("Inventory"));
         if (compound.contains("ProcessedItem"))
             processedItem = ItemStack.parseOptional(registries, compound.getCompound("ProcessedItem"));
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), processedItem);
     }
 
     @Override

@@ -25,7 +25,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LightningRodBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,7 +38,8 @@ import plus.dragons.createenchantmentindustry.common.registry.CEIBlocks;
 
 @Mixin(LightningBolt.class)
 public abstract class LightningBoltMixin extends Entity {
-    @Shadow protected abstract BlockPos getStrikePosition();
+    @Shadow
+    protected abstract BlockPos getStrikePosition();
 
     private LightningBoltMixin(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -52,7 +52,7 @@ public abstract class LightningBoltMixin extends Entity {
         Level level = this.level();
         BlockPos pos = this.getStrikePosition();
         BlockState blockstate = level.getBlockState(pos);
-        if (blockstate.is(Blocks.LIGHTNING_ROD)) {
+        if (blockstate.is(BlazeExperienceBlockEntity.LIGHTNING_ROD_BLOCKS)) {
             pos = pos.relative(blockstate.getValue(LightningRodBlock.FACING).getOpposite());
             blockstate = level.getBlockState(pos);
         }
@@ -69,7 +69,8 @@ public abstract class LightningBoltMixin extends Entity {
         }
     }
 
-    @Unique private static void tick$randomWalkChargeExperience(Level level, BlockPos pos, BlockPos.MutableBlockPos mutable, int steps) {
+    @Unique
+    private static void tick$randomWalkChargeExperience(Level level, BlockPos pos, BlockPos.MutableBlockPos mutable, int steps) {
         mutable.set(pos);
         for (int i = 0; i < steps; i++) {
             Optional<BlockPos> optional = tick$randomWalkChargeExperience(level, mutable);
@@ -80,7 +81,8 @@ public abstract class LightningBoltMixin extends Entity {
         }
     }
 
-    @Unique private static Optional<BlockPos> tick$randomWalkChargeExperience(Level level, BlockPos pos) {
+    @Unique
+    private static Optional<BlockPos> tick$randomWalkChargeExperience(Level level, BlockPos pos) {
         for (BlockPos blockpos : BlockPos.randomInCube(level.random, 10, pos, 1)) {
             BlockState blockstate = level.getBlockState(blockpos);
             if (blockstate.is(AllBlocks.EXPERIENCE_BLOCK)) {

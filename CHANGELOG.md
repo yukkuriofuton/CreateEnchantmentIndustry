@@ -1,10 +1,10 @@
-### Create: Enchantment Industry 2.0.1
+### Create: Enchantment Industry 2.0.4
 
-Overhauling Completed. Welcome to C:EI 2.0!
+Requires Create: Dragons Plus 1.3.1, which contains an important bugfix
 
 #### Update
-* European Spanish localization (partial) (by @carlosdi0)
-* Mexican Spanish localization (partial) (by @hyehue)
+* Improve ponder to explain Super Enchanting Material more clearly
 
 #### Fix
-* Fix stripping enchantment off enchanted book might give empty enchanted book
+* Fix Spouting liquid experience onto mending tools duplicates the tool
+* Fix Mechanical Grindstone does not drop processing item when be destoryed
