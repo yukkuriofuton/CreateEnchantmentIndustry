@@ -38,7 +38,7 @@ import net.neoforged.neoforge.event.GrindstoneEvent;
 import plus.dragons.createenchantmentindustry.common.registry.CEIRecipes;
 
 public class GrindstoneHelper {
-    public static boolean canItemBeGrinded(Level level, ItemStack top, ItemStack bottom) {
+    public static boolean canItemBeGrinded(ItemStack top, ItemStack bottom) {
         var event = NeoForge.EVENT_BUS.post(new GrindstoneEvent.OnPlaceItem(top, bottom, -1));
         if (event.isCanceled())
             return false;
@@ -98,7 +98,10 @@ public class GrindstoneHelper {
         var grinding = SequencedAssemblyRecipe.getRecipe(level, input, CEIRecipes.GRINDING.getType(), GrindingRecipe.class);
         if (grinding.isEmpty())
             grinding = level.getRecipeManager().getRecipeFor(CEIRecipes.GRINDING.getType(), input, level);
-        return grinding.map(grindingRecipeRecipeHolder -> grindingRecipeRecipeHolder.value().getFluidResults().getFirst().getAmount()).orElse(0);
+        if (grinding.isEmpty()) return 0;
+        var f = grinding.get().value().getFluidResults();
+        if (f.isEmpty()) return 0;
+        return f.getFirst().getAmount();
     }
 
     private static ItemStack computeResult(ItemStack top, ItemStack bottom) {

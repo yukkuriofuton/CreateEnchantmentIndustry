@@ -58,7 +58,15 @@ public class CustomNamePrintingBehaviour implements PrintingBehaviour {
 
     @Override
     public int getRequiredItemCount(Level level, ItemStack stack) {
-        return stack.getCount();
+        var name = getCustomName(tank.getPrimaryHandler().getFluid());
+        if (CEIConfig.fluids().printingCustomNameAsItemName.get()) {
+            var n = stack.get(DataComponents.ITEM_NAME);
+            if (n != null && n.equals(name)) return 0;
+        } else {
+            var n = stack.get(DataComponents.CUSTOM_NAME);
+            if (n != null && n.equals(name)) return 0;
+        }
+        return 1;
     }
 
     @Override
@@ -71,10 +79,11 @@ public class CustomNamePrintingBehaviour implements PrintingBehaviour {
     public ItemStack getResult(Level level, ItemStack stack, FluidStack fluidStack) {
         var result = stack.copy();
         var name = getCustomName(fluidStack);
-        if (CEIConfig.fluids().printingCustomNameAsItemName.get())
+        if (CEIConfig.fluids().printingCustomNameAsItemName.get()) {
             result.set(DataComponents.ITEM_NAME, name);
-        else
+        } else {
             result.set(DataComponents.CUSTOM_NAME, name);
+        }
         return result;
     }
 
@@ -92,7 +101,7 @@ public class CustomNamePrintingBehaviour implements PrintingBehaviour {
             name.withStyle(ChatFormatting.ITALIC);
         CEILang.translate("gui.goggles.printing.custom_name").forGoggles(tooltip);
         CEILang.builder().add(name).forGoggles(tooltip, 1);
-        var cost = tank.getPrimaryHandler().getFluid().getFluidHolder().getData(CEIDataMaps.PRINTING_PATTERN_INGREDIENT);
+        var cost = tank.getPrimaryHandler().getFluid().getFluidHolder().getData(CEIDataMaps.PRINTING_CUSTOM_NAME_INGREDIENT);
         if (cost != null)
             CEILang.translate("gui.goggles.printing.cost",
                     CEILang.number(cost)

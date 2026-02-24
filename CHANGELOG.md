@@ -1,15 +1,14 @@
-### Create: Enchantment Industry 2.1.2
+## Create: Enchantment Industry 2.3.0
 
-Require Create: Dragons Plus 1.5.0
+Update for Create 6.0.9
 
-#### Update
-* Now you can throw item to Mechanical Grindstone to process it
-* Improve English grammar. clarity, and consistency (by @Zain)
-* More goggle tooltips has been added to Blaze Forger & Blaze Enchanter to indicate why it's not working
-* Added a few more explanation on ponder
+### Update
+* Add Compat for Touhou Little Maid (Thanks @yabo083)
 
-#### Change
-* Removed dye buckets and fluid hatch from C:EI creative tab since they already exist in C:DP own creative tab 
-
-#### Fix
-* Fixed Blaze Enchanter accept Super Enchanter Template no matter it's in Super Enchanting mode or not
+### Fix
+* Fix glitchy animation (Thanks @BMasta)
+* Fix Unlocalized text for attribute filter
+* Fix EXP is not required during forging in certain situation
+* Fix crash when rotate Blaze Enchanter
+* Fix breaking Printers destroys any EXP inside
+* Fix Sweeping Edge enchantment on deployer has extremely low damage on non-main targets

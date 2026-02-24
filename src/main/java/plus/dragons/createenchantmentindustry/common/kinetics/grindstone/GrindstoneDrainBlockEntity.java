@@ -27,7 +27,6 @@ import com.simibubi.create.content.processing.recipe.ProcessingInventory;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import java.util.List;
 import java.util.Optional;
 import net.createmod.catnip.math.VecHelper;
@@ -56,6 +55,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 import plus.dragons.createdragonsplus.common.advancements.AdvancementBehaviour;
@@ -64,6 +64,7 @@ import plus.dragons.createenchantmentindustry.common.registry.CEIAdvancements;
 import plus.dragons.createenchantmentindustry.common.registry.CEIFluids;
 import plus.dragons.createenchantmentindustry.common.registry.CEIRecipes;
 import plus.dragons.createenchantmentindustry.common.registry.CEIStats;
+import plus.dragons.createenchantmentindustry.config.CEIConfig;
 
 @FieldsNullabilityUnknownByDefault
 public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
@@ -80,9 +81,20 @@ public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
             @Override
             public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
                 var space = tank.getPrimaryHandler().getSpace();
-                if (GrindstoneHelper.getExperienceFromItem(stack) > space) return stack;
-                if (GrindstoneHelper.getExperienceFromGrindingRecipe(level, stack) > space) return stack;
+                int a = GrindstoneHelper.getExperienceFromItem(stack);
+                int b = GrindstoneHelper.getExperienceFromGrindingRecipe(level, stack);
+                if (a > space || b > space) return stack;
                 return super.insertItem(slot, stack, simulate);
+            }
+
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                if (slot == 3000) { // IMPORTANT: 3000 is for internal usage for extract item in Processing inventory. Normally it won't be call by any other circumstances
+                    var result = getStackInSlot(0);
+                    clear();
+                    return result;
+                }
+                return ItemStack.EMPTY;
             }
         }.withSlotLimit(true);
     }
@@ -90,7 +102,7 @@ public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         super.addBehaviours(behaviours);
-        tank = SmartFluidTankBehaviour.single(this, 1000);
+        tank = SmartFluidTankBehaviour.single(this, CEIConfig.fluids().mechanicalGrindstoneFluidCapacity.get());
         beltInput = new DirectBeltInputBehaviour(this).allowingBeltFunnels();
         advancement = new AdvancementBehaviour(this);
         behaviours.add(tank);
@@ -149,7 +161,7 @@ public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
         if (recipeManager.getRecipeFor(AllRecipeTypes.SANDPAPER_POLISHING.getType(), input, level).isPresent()) {
             return 50 * sizeModifier;
         }
-        if (GrindstoneHelper.canItemBeGrinded(level, inputStack, ItemStack.EMPTY)) {
+        if (GrindstoneHelper.canItemBeGrinded(inputStack, ItemStack.EMPTY)) {
             return 50 * sizeModifier;
         }
         return 10;
@@ -163,9 +175,9 @@ public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
         return false;
     }
 
-    private boolean drain(FluidIngredient fluidIngredient) {
+    private boolean drain(SizedFluidIngredient fluidIngredient) {
         FluidStack fluid = tank.getPrimaryHandler().getFluid();
-        int required = fluidIngredient.getRequiredAmount();
+        int required = fluidIngredient.amount();
         if (fluidIngredient.test(fluid) && fluid.getAmount() >= required) {
             fluid.shrink(required);
             tank.getPrimaryHandler().setFluid(fluid);
@@ -198,7 +210,7 @@ public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
             var recipe = grinding.get().value();
             var fluidIngredients = recipe.getFluidIngredients();
             var fluidResults = recipe.getFluidResults();
-            boolean applicable = true;
+            boolean applicable = false;
             if (!fluidIngredients.isEmpty())
                 applicable = drain(fluidIngredients.getFirst());
             else if (!fluidResults.isEmpty())
@@ -207,7 +219,7 @@ public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
                 if (fluidResults.getFirst().is(CEIFluids.EXPERIENCE))
                     advancement.awardStat(CEIStats.GRINDSTONE_EXPERIENCE.get(), fluidResults.getFirst().getAmount());
                 inventory.clear();
-                var grinded = recipe.rollResults();
+                var grinded = recipe.rollResults(level.random);
                 for (int i = 0; i < grinded.size(); i++)
                     inventory.setStackInSlot(i + 1, grinded.get(i));
                 return;
@@ -309,6 +321,7 @@ public class GrindstoneDrainBlockEntity extends KineticBlockEntity {
     public void destroy() {
         super.destroy();
         Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), processedItem);
+        Containers.dropItemStack(level, worldPosition.getX(), worldPosition.getY(), worldPosition.getZ(), inventory.extractItem(3000, 64, false));
     }
 
     @Override

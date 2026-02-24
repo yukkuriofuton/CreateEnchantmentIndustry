@@ -18,6 +18,7 @@
 
 package plus.dragons.createenchantmentindustry.common.registry;
 
+import static net.minecraft.world.item.enchantment.Enchantments.INFINITY;
 import static net.minecraft.world.item.enchantment.Enchantments.MENDING;
 import static plus.dragons.createenchantmentindustry.common.CEICommon.REGISTRATE;
 
@@ -84,6 +85,10 @@ public class CEIDataMaps {
             .builder(CEICommon.asResource("printing/written_book/ingredient"), Registries.FLUID, ExtraCodecs.POSITIVE_INT)
             .synced(Codec.INT, true)
             .build();
+    public static final DataMapType<Fluid, Integer> PRINTING_BANNER_PATTERN_INGREDIENT = DataMapType
+            .builder(CEICommon.asResource("printing/banner_pattern/ingredient"), Registries.FLUID, ExtraCodecs.POSITIVE_INT)
+            .synced(Codec.INT, true)
+            .build();
     public static final DataMapType<Enchantment, List<CEIIntIntPair>> PRINTING_ENCHANTED_BOOK_COST = DataMapType
             .builder(CEICommon.asResource("printing/enchanted_book/custom_cost"), Registries.ENCHANTMENT, Codec.list(CEIIntIntPair.CODEC))
             .synced(Codec.list(CEIIntIntPair.CODEC), true)
@@ -117,6 +122,7 @@ public class CEIDataMaps {
         event.register(PRINTING_CUSTOM_NAME_STYLE);
         event.register(PRINTING_WRITTEN_BOOK_INGREDIENT);
         event.register(PRINTING_ENCHANTED_BOOK_COST);
+        event.register(PRINTING_BANNER_PATTERN_INGREDIENT);
         event.register(FORGING_COST_MULTIPLIER);
         event.register(SPLITTING_COST_MULTIPLIER);
         event.register(SUPER_ENCHANTING_LEVEL_EXTENSION);
@@ -178,7 +184,10 @@ public class CEIDataMaps {
                         new ModLoadedCondition("reliquary"))
                 .add(ResourceLocation.fromNamespaceAndPath("sophisticatedcore", "xp_still"),
                         20, false,
-                        new ModLoadedCondition("sophisticatedcore"));
+                        new ModLoadedCondition("sophisticatedcore"))
+                .add(ResourceLocation.fromNamespaceAndPath("justdirethings", "xp_fluid_source"),
+                        20, false,
+                        new ModLoadedCondition("justdirethings"));
         var blackDye = CDPFluids.COMMON_TAGS.dyesByColor.get(DyeColor.BLACK);
         provider.builder(PRINTING_ADDRESS_INGREDIENT)
                 .add(blackDye, 10, false);
@@ -191,6 +200,8 @@ public class CEIDataMaps {
                 .add(CDPFluids.COMMON_TAGS.dyes, 250, false);
         provider.builder(PRINTING_WRITTEN_BOOK_INGREDIENT)
                 .add(blackDye, 10, false);
+        provider.builder(PRINTING_BANNER_PATTERN_INGREDIENT)
+                .add(CDPFluids.COMMON_TAGS.dyes, 100, false);
         var customNameStyles = provider.builder(PRINTING_CUSTOM_NAME_STYLE);
         CDPFluids.COMMON_TAGS.dyesByColor.forEach((color, tag) -> customNameStyles
                 .add(tag, Style.EMPTY.withColor(color.getTextColor()), false));
@@ -198,6 +209,8 @@ public class CEIDataMaps {
         provider.builder(FORGING_COST_MULTIPLIER);
         provider.builder(SPLITTING_COST_MULTIPLIER);
         provider.builder(SUPER_ENCHANTING_LEVEL_EXTENSION)
-                .add(MENDING, 0, false);
+                .add(MENDING, 0, false)
+                .add(INFINITY, 0, false);
+        ;
     }
 }

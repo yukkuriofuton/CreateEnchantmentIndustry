@@ -60,6 +60,7 @@ public class FillingBySpoutMixin {
             var result = stack.copy();
             stack.shrink(1);
             ExperienceHelper.repairItem(availableXp, serverLevel, result, false);
+            availableFluid.shrink(requiredAmount);
             cir.setReturnValue(result);
         }
     }

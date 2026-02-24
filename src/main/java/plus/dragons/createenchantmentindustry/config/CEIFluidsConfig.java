@@ -53,6 +53,10 @@ public class CEIFluidsConfig extends ConfigBase {
             "enableCustomNamePrinting",
             Comments.enableCustomNamePrinting,
             RequiresRestart.SERVER.asComment());
+    public final ConfigBool enableBannerPatternPrinting = b(true,
+            "enableBannerPatternPrinting",
+            Comments.enableBannerPatternPrinting,
+            RequiresRestart.SERVER.asComment());
     public final ConfigBool printingCustomNameAsItemName = b(false,
             "printingCustomNameAsItemName",
             Comments.printingCustomNameAsItemName);
@@ -79,7 +83,22 @@ public class CEIFluidsConfig extends ConfigBase {
             RequiresRestart.SERVER.asComment());
     public final ConfigInt experienceLanternDrainRate = i(50, 1,
             "experienceLanternDrainRate",
-            Comments.experienceLanternDrainRate,
+            Comments.experienceLanternDrainRate);
+    public final ConfigBool experienceLanternPullToggle = b(true,
+            "experienceLanternPullToggle",
+            Comments.experienceLanternPullToggle);
+    public final ConfigInt experienceLanternPullRadius = i(10, 0,
+            "experienceLanternPullRadius",
+            Comments.experienceLanternPullRadius);
+    public final ConfigFloat experienceLanternPullForceMultiplier = f(.075f, 0.0f, .5f,
+            "experienceLanternPullForceMultiplier",
+            Comments.experienceLanternPullForceMultiplier);
+    public final ConfigBool experienceLanternDrainMaidExperience = b(true,
+            "experienceLanternDrainMaidExperience",
+            Comments.experienceLanternDrainMaidExperience);
+    public final ConfigInt mechanicalGrindstoneFluidCapacity = i(1000, 5000,
+            "mechanicalGrindstoneFluidCapacity",
+            Comments.mechanicalGrindstoneFluidCapacity,
             RequiresRestart.SERVER.asComment());
 
     @Override
@@ -96,6 +115,7 @@ public class CEIFluidsConfig extends ConfigBase {
         static final String enablePackagePatternPrinting = "If the changing package patterns function of Printers should be enabled.";
         static final String enablePackageAddressPrinting = "If the assigning package addresses function of Printers should be enabled.";
         static final String enableCustomNamePrinting = "If the assigning custom names function of Printers should be enabled.";
+        static final String enableBannerPatternPrinting = "If the printing banner patterns function of Printers should be enabled.";
         static final String printingCustomNameAsItemName = "Whether printing custom names (displayed in italics) should instead print as as item names (displayed in non-italics).";
         static final String printingGenerationChange = "The generation change when copying Written Books; " +
                 "a value of 1 will prevent copying copy of copy";
@@ -106,5 +126,10 @@ public class CEIFluidsConfig extends ConfigBase {
         static final String blazeForgerFluidCapacity = "The amount of liquid a Blaze Forger can hold (mB).";
         static final String experienceLanternFluidCapacity = "The amount of liquid an Experience Lantern can hold (mB).";
         static final String experienceLanternDrainRate = "The amount of experience an Experience Lantern can drain from player per 0.5 ticks (mB).";
+        static final String experienceLanternPullToggle = "Whether the Experience Lantern will pull in experience orbs from nearby.";
+        static final String experienceLanternPullRadius = "The range at which experience orbs will be pulled into the lantern.";
+        static final String experienceLanternPullForceMultiplier = "Modifier for the amount of force with which to pull the experience orbs.";
+        static final String experienceLanternDrainMaidExperience = "Whether the Experience Lantern will drain experience from nearby Touhou Little Maid's maids (requires TLM mod).";
+        static final String mechanicalGrindstoneFluidCapacity = "The amount of liquid a Grindstone Drain can hold (mB).";
     }
 }

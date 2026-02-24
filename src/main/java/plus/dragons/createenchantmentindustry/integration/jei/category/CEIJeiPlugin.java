@@ -22,7 +22,7 @@ import com.google.common.base.Preconditions;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
-import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe;
+import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +34,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.api.distmarker.Dist;
@@ -41,7 +42,6 @@ import net.neoforged.fml.loading.FMLLoader;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import plus.dragons.createdragonsplus.util.ErrorMessages;
 import plus.dragons.createenchantmentindustry.common.CEICommon;
-import plus.dragons.createenchantmentindustry.common.fluids.printer.behaviour.*;
 import plus.dragons.createenchantmentindustry.common.kinetics.grindstone.GrindingRecipe;
 import plus.dragons.createenchantmentindustry.common.kinetics.grindstone.MechanicalGrindStoneItem;
 import plus.dragons.createenchantmentindustry.common.registry.CEIBlocks;
@@ -80,14 +80,12 @@ public class CEIJeiPlugin implements IModPlugin {
         if (CEIConfig.fluids().enableCreateCopiableItemPrinting.get()) builtinPrinting.add(CopyPrintingRecipeJEI.INSTANCE);
         if (CEIConfig.fluids().enableCustomNamePrinting.get()) builtinPrinting.add(CustomNamePrintingRecipeJEI.INSTANCE);
         if (CEIConfig.fluids().enableWrittenBookPrinting.get()) builtinPrinting.add(WrittenBookPrintingRecipeJEI.INSTANCE);
+        if (CEIConfig.fluids().enableBannerPatternPrinting.get()) builtinPrinting.add(BannerPatternPrintingRecipeJEI.INSTANCE);
         if (!builtinPrinting.isEmpty())
             registration.addRecipes(PrintingCategory.TYPE, builtinPrinting);
         if (CEIConfig.fluids().enableEnchantedBookPrinting.get())
             registration.addRecipes(PrintingCategory.TYPE, EnchantedBookPrintingRecipeJEI.listAll());
-        var manualApplication = registration
-                .getJeiHelpers()
-                .getRecipeType(Create.asResource("item_application"), ItemApplicationRecipe.class)
-                .orElseThrow();
+        mezz.jei.api.recipe.RecipeType<RecipeHolder<ManualApplicationRecipe>> manualApplication = mezz.jei.api.recipe.RecipeType.createRecipeHolderType(Create.asResource("item_application"));
         registration.addRecipes(manualApplication, List.of(MechanicalGrindStoneItem.createRecipe()));
         registration.addRecipes(GrindingCategory.TYPE, recipeManager
                 .getAllRecipesFor(CEIRecipes.GRINDING.getType()));

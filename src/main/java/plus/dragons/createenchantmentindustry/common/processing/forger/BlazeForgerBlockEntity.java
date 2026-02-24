@@ -72,7 +72,7 @@ public class BlazeForgerBlockEntity extends BlazeExperienceBlockEntity {
     }
 
     public @Nullable IFluidHandler getFluidHandler(@Nullable Direction side) {
-        if (side == Direction.DOWN || side == null && !isRemoved())
+        if ((side == Direction.DOWN || side == null) && !isRemoved())
             return tanks.getCapability();
         return null;
     }
@@ -209,19 +209,29 @@ public class BlazeForgerBlockEntity extends BlazeExperienceBlockEntity {
     }
 
     public ItemStack insertItem(ItemStack stack, boolean simulate) {
+        var original = stack;
         if (inventory.hasRemainingOutput()) return stack;
         if (!stack.isEmpty())
             stack = inventory.insertItem(0, stack, simulate);
         if (!stack.isEmpty())
             stack = inventory.insertItem(1, stack, simulate);
+        if(!simulate && (original.getCount()!=stack.getCount() || !ItemStack.isSameItemSameComponents(original, stack))){
+            inventory.updateResult();
+            notifyUpdate();
+        }
         return stack;
     }
 
     public ItemStack extractItem(boolean simulate) {
         for (int i = inventory.getSlots() - 1; i >= 0; i--) {
             ItemStack extracted = inventory.extractItem(i, 1, simulate);
-            if (!extracted.isEmpty())
+            if (!extracted.isEmpty()){
+                if(!simulate && i<2){
+                    inventory.updateResult();
+                    notifyUpdate();
+                }
                 return extracted;
+            }
         }
         return ItemStack.EMPTY;
     }
@@ -252,11 +262,11 @@ public class BlazeForgerBlockEntity extends BlazeExperienceBlockEntity {
                             TooltipFlag.NORMAL);
             }
         } else {
-            if(inventory.forgingCompleted())
+            if (inventory.forgingCompleted())
                 CEILang.translate("gui.goggles.forging.completed").style(ChatFormatting.GREEN).forGoggles(tooltip);
-            else if(!inventory.notEnoughItemToForge()){
-                if(inventory.incompatibleEnchantingTemplateType())
-                    CEILang.translate("gui.goggles.forging.invalid_template_type." + (special ? "normal": "special")).style(ChatFormatting.RED).forGoggles(tooltip);
+            else if (!inventory.notEnoughItemToForge()) {
+                if (inventory.incompatibleEnchantingTemplateType())
+                    CEILang.translate("gui.goggles.forging.invalid_template_type." + (special ? "normal" : "special")).style(ChatFormatting.RED).forGoggles(tooltip);
                 else CEILang.translate("gui.goggles.forging.invalid_items").style(ChatFormatting.RED).forGoggles(tooltip);
             }
         }

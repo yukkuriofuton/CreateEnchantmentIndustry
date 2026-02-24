@@ -28,19 +28,28 @@ import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import plus.dragons.createenchantmentindustry.common.fluids.experience.ExperienceHelper;
 import plus.dragons.createenchantmentindustry.common.registry.CEIFluids;
 import plus.dragons.createenchantmentindustry.config.CEIConfig;
+import plus.dragons.createenchantmentindustry.integration.tlm.TLMCompat;
 
-public class ExperienceLanternMovementBehavior implements MovementBehaviour {
+public class ExperienceLanternMovementBehaviour implements MovementBehaviour {
     @Override
     public void tick(MovementContext context) {
         if (!context.world.isClientSide && context.world.getGameTime() % 10 == 0) {
+            var effectiveAABB = new AABB(context.position.subtract(0.5d, 0.5d, 0.5d), context.position.add(0.5d, 0.5d, 0.5d)).inflate(0.5);
             drainExp(context.world,
-                    new AABB(context.position.subtract(0.5d, 0.5d, 0.5d), context.position.add(0.5d, 0.5d, 0.5d)).inflate(0.5),
+                    effectiveAABB,
                     context.contraption.getStorage().getFluids());
+        }
+        if (!context.world.isClientSide && CEIConfig.fluids().experienceLanternPullToggle.get()) {
+            var effectiveAABB = new AABB(context.position.subtract(0.5d, 0.5d, 0.5d), context.position.add(0.5d, 0.5d, 0.5d)).inflate(0.5);
+            pullExp(context.world,
+                    effectiveAABB,
+                    context.position);
         }
     }
 
@@ -95,6 +104,24 @@ public class ExperienceLanternMovementBehavior implements MovementBehaviour {
                         orb.value -= inserted;
                     }
                     break;
+                }
+            }
+        }
+        // Drain experience from Touhou Little Maid's maids if the mod is loaded
+        if (TLMCompat.isLoaded() && CEIConfig.fluids().experienceLanternDrainMaidExperience.get()) {
+            plus.dragons.createenchantmentindustry.integration.tlm.MaidExperienceHandler
+                    .drainMaidExperience(level, effectiveAABB, tank);
+        }
+    }
+
+    protected void pullExp(Level level, AABB effectiveAABB, Vec3 position) {
+        List<ExperienceOrb> experienceOrbs = level.getEntitiesOfClass(ExperienceOrb.class, effectiveAABB.inflate(CEIConfig.fluids().experienceLanternPullRadius.get()));
+        if (!experienceOrbs.isEmpty()) {
+            for (var orb : experienceOrbs) {
+                if (orb.getDeltaMovement().length() <= .5) {
+                    var pushForce = CEIConfig.fluids().experienceLanternPullForceMultiplier.get() * 1 / orb.position().distanceTo(position);
+                    var directionToLantern = position.subtract(orb.position()).normalize().multiply(pushForce, pushForce, pushForce);
+                    orb.push(directionToLantern);
                 }
             }
         }
